@@ -1,0 +1,4 @@
+Cup  5
+Spoon  2
+Fork 2
+Plate  8

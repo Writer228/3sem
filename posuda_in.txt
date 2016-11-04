@@ -1,0 +1,4 @@
+Cup  12
+Spoon  20
+Fork  11
+Plate  31
