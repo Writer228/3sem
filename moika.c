@@ -120,13 +120,14 @@ int main()
 				i++;
 			}
 		}
-		
-		fclose(moishik);
-		fclose(posuda_in);
-		fclose(vitiralchik);
-		msgctl(msqid, IPC_RMID, (struct msqid_ds*)NULL);
-		semctl(semid, 0, IPC_RMID, 0);
-		printf("all dishes is clear");
+		strcpy(mybuf.info.dishes, "end");
+		if (msgsnd(msqid, (struct msgbuf *) &mybuf, len, 0) < 0)
+			{
+			  printf("Can\'t send message to queue\n");
+			  msgctl(msqid, IPC_RMID, (struct msqid_ds*)NULL);
+			  exit(-1);
+			}
+		printf("all dishes were washed\n\n");
 	}
 	
 	else // vitiralshik
@@ -141,6 +142,10 @@ int main()
 			  exit(-1);
 			}
 			k = 0;
+			if (strcmp(mybuf.info.dishes, "end") == 0)
+			{
+				break;
+			}
 			if (strcmp(mybuf.info.dishes, myvitiralchik[k].dishes) != 0)
 				{
 					k++;
@@ -154,6 +159,12 @@ int main()
 			printf("There is %d free places on the table\n\n",semctl(semid, 0, GETVAL, 0));
 			
 		}
+		printf("all dishes were wiped\n");
+		fclose(moishik);
+		fclose(posuda_in);
+		fclose(vitiralchik);
+		msgctl(msqid, IPC_RMID, (struct msqid_ds*)NULL);
+		semctl(semid, 0, IPC_RMID, 0);
 	}
 	return 0;
 }
