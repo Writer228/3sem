@@ -12,12 +12,16 @@
 #include <sys/sem.h>
 #include <dirent.h>
 
-#define MAX_DEAPTH 2
+#define MAX_DEPTH 2
 
 int Find(DIR *dirp, int depth, char *path);
 
 struct stat buf;
 struct dirent *mydirent;
+
+/*
+ * Магические числа 40, 150. Нужно объявить константы.
+ */
 
 char name[40] = {"DeapSearch.c"};
 char path[150] = {"/home/user/Desktop"};
@@ -30,7 +34,7 @@ int main()
 	
 	dirp = opendir(path);
 	
-	if (Find(dirp, MAX_DEAPTH, name) == 10)
+	if (Find(dirp, MAX_DEPTH, name) == 10)
 	{
 		printf("File was not found");
 	}
@@ -52,7 +56,12 @@ int Find(DIR *dirp, int depth, char *name)
 
 			break;
 		}
+    /*
+     * Если файл существует, то вы его найдёте, но вот размер его выведите неверный в общем случае, т.к. 
+     * Можете добавить проверку возвращаемого значения stat
+     */
 		stat(mydirent->d_name, &buf);
+    
 		if ((int)mydirent->d_type == 8)
 		{
 			if (strcmp(mydirent->d_name, name) == 0)
@@ -76,6 +85,9 @@ int Find(DIR *dirp, int depth, char *name)
 		}
 		
 	}
+/*
+ * что за магические цифры 4, 8, 10?
+ * Если ещё нет готовых констант для них, то нужно объявить.
+ */
 	return 10;
-	
 }
